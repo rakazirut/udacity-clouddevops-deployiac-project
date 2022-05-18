@@ -49,11 +49,32 @@ Resources:
         FromPort: 80
         ToPort: 80
         CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
       - IpProtocol: tcp
         FromPort: 0
         ToPort: 65535
         CidrIp: 0.0.0.0/0
+
+  Bastion:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0022f774911c1d690
+      KeyName: "rkec2"
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: Bastion 
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - Ref: WebServerSecurityGroup
+          SubnetId:
+            Fn::ImportValue: !Sub "${EnvironmentName}-Bastion-Subnet"
 
   WebServerLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
@@ -67,6 +88,7 @@ Resources:
           aws s3 cp s3://rk-569874003651-bucket/index.html .
           systemctl start apache2.service  
       ImageId: ami-005de95e8ff495156
+      KeyName: "rkec2"
       IamInstanceProfile: !Ref S3ReadOnlyEC2InstanceProfile
       SecurityGroups:
       - Ref: WebServerSecurityGroup

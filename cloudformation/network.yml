@@ -35,6 +35,11 @@ Parameters:
         Type: String
         Default: 10.0.3.0/24
 
+    BastionCIDR:
+        Description: Please enter the IP range (CIDR notation) for the bastion subnet
+        Type: String
+        Default: 10.0.4.0/24
+
 Resources:
 
     VPC: 
@@ -58,6 +63,17 @@ Resources:
         Properties:
             InternetGatewayId: !Ref InternetGateway
             VpcId: !Ref VPC
+
+    BastionSubnet: 
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref VPC
+            AvailabilityZone: !Select [ 0, !GetAZs '' ]
+            CidrBlock: !Ref BastionCIDR
+            MapPublicIpOnLaunch: true
+            Tags: 
+                - Key: Name 
+                  Value: !Sub ${EnvironmentName} Subnet for bastion Host
 
     PublicSubnet1: 
         Type: AWS::EC2::Subnet
@@ -120,6 +136,12 @@ Resources:
             RouteTableId: !Ref PublicRouteTable
             DestinationCidrBlock: 0.0.0.0/0
             GatewayId: !Ref InternetGateway
+
+    BastionRouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+            RouteTableId: !Ref PublicRouteTable
+            SubnetId: !Ref BastionSubnet
 
     PublicSubnet1RouteTableAssociation:
         Type: AWS::EC2::SubnetRouteTableAssociation
@@ -258,3 +280,9 @@ Outputs:
         Value: !Ref PrivateSubnet2
         Export:
           Name: !Sub ${EnvironmentName}-Private2-Subnet
+
+    BastionSubnet: 
+        Description: A reference to the bastion subnet
+        Value: !Ref BastionSubnet
+        Export:
+          Name: !Sub ${EnvironmentName}-Bastion-Subnet
