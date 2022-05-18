@@ -141,6 +141,6 @@ Outputs:
 
     WebServerLoadBalancerUrl:
         Description: Load balancer url
-        Value: !Join [ "", [ "https://", !GetAtt WebServerLoadBalancer.DNSName ]]
+        Value: !Join [ "", [ "http://", !GetAtt WebServerLoadBalancer.DNSName ]]
         Export:
           Name: !Sub ${EnvironmentName}-Dns-Name
