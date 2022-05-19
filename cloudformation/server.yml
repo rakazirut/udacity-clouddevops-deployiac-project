@@ -10,6 +10,14 @@ Parameters:
         Description: An environment name that will be prefixed to resource names
         Type: String
 
+    WebServerAMI:
+        Description: AMI image for ubuntu 18 in us-east-1
+        Type: String
+
+    BastionAMI:
+        Description: AMI image for amazon linux in us-east-1
+        Type: String
+
 Resources:
 
   S3ReadOnlyEC2InstanceProfile:
@@ -52,7 +60,7 @@ Resources:
       - IpProtocol: tcp
         FromPort: 22
         ToPort: 22
-        CidrIp: 0.0.0.0/0
+        CidrIp: 99.7.89.156/32
       SecurityGroupEgress:
       - IpProtocol: tcp
         FromPort: 0
@@ -62,7 +70,7 @@ Resources:
   Bastion:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0022f774911c1d690
+      ImageId: !Ref BastionAMI
       KeyName: "rkec2"
       InstanceType: t2.micro
       Tags:
@@ -87,7 +95,7 @@ Resources:
           cd /var/www/html
           aws s3 cp s3://rk-569874003651-bucket/index.html .
           systemctl start apache2.service  
-      ImageId: ami-005de95e8ff495156
+      ImageId: !Ref WebServerAMI
       KeyName: "rkec2"
       IamInstanceProfile: !Ref S3ReadOnlyEC2InstanceProfile
       SecurityGroups:

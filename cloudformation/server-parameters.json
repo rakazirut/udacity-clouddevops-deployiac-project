@@ -2,5 +2,13 @@
 	{
 		"ParameterKey": "EnvironmentName",
 		"ParameterValue": "RK-UdacityDevOps-Project2"
+	},
+	{
+		"ParameterKey": "WebServerAMI",
+		"ParameterValue": "ami-005de95e8ff495156"
+	},
+	{
+		"ParameterKey": "BastionAMI",
+		"ParameterValue": "ami-0022f774911c1d690"
 	}
 ]
