@@ -40,3 +40,5 @@ Use the appropriate scripts to create, update, or delete infrastructure as neede
 ## Demo of Udagram
 
 ![Demo](/output/udagram.png)
+
+[http://rkser-webse-zlcy4ljg3gas-647052830.us-east-1.elb.amazonaws.com/](http://rkser-webse-zlcy4ljg3gas-647052830.us-east-1.elb.amazonaws.com/)

@@ -96,11 +96,10 @@ Resources:
           aws s3 cp s3://rk-569874003651-bucket/index.html .
           systemctl start apache2.service  
       ImageId: !Ref WebServerAMI
-      KeyName: "rkec2"
       IamInstanceProfile: !Ref S3ReadOnlyEC2InstanceProfile
       SecurityGroups:
       - Ref: WebServerSecurityGroup
-      InstanceType: t3.medium
+      InstanceType: t2.micro
       BlockDeviceMappings:
       - DeviceName: "/dev/sdk"
         Ebs:
@@ -129,8 +128,8 @@ Resources:
       - Fn::ImportValue: !Sub "${EnvironmentName}-Private2-Subnet"
       LaunchConfigurationName:
         Ref: WebServerLaunchConfig
-      MinSize: '4'
-      MaxSize: '8'
+      MinSize: '2'
+      MaxSize: '4'
       TargetGroupARNs:
       - Ref: WebServerTargetGroup
 
